@@ -1,10 +1,8 @@
 import renderToString from 'next-mdx-remote/render-to-string'
 import hydrate from 'next-mdx-remote/hydrate'
 import matter from 'gray-matter'
-import fs from 'fs'
-import path from 'path'
 
-const root = process.cwd()
+import { getContent } from '../../utils/get-content';
 
 export default function BlogPost({ mdxSource, frontMatter }) {
   const content = hydrate(mdxSource)
@@ -17,19 +15,18 @@ export default function BlogPost({ mdxSource, frontMatter }) {
 }
 
 export async function getStaticPaths() {
+  const { postData } = getContent()
+
   return {
     fallback: false,
-    paths: fs
-      .readdirSync(path.join(root, 'content'))
-      .map((p) => ({ params: { slug: p.replace(/\.mdx/, '') } })),
+    paths: postData.map(({ slug }) => ({ params: { slug } }))
   }
 }
 
 export async function getStaticProps({ params }) {
-  const source = fs.readFileSync(
-    path.join(root, 'content', `${params.slug}.mdx`),
-    'utf8'
-  )
+  const { postData } = getContent()
+  const { content: source } = postData.find(_ => _.slug === params.slug)
+
   const { data, content } = matter(source)
   const mdxSource = await renderToString(content)
   return { props: { mdxSource, frontMatter: data } }

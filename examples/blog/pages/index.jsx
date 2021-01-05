@@ -1,9 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
 import Link from 'next/link'
 
-const root = process.cwd()
+import { getContent } from '../utils/get-content';
 
 export default function IndexPage({ postData }) {
   return (
@@ -23,14 +20,6 @@ export default function IndexPage({ postData }) {
 }
 
 export async function getStaticProps() {
-  const contentRoot = path.join(root, 'content')
-  const postData = fs.readdirSync(contentRoot).map((p) => {
-    const content = fs.readFileSync(path.join(contentRoot, p), 'utf8')
-    return {
-      slug: p.replace(/\.mdx/, ''),
-      content,
-      frontMatter: matter(content).data,
-    }
-  })
+  const { postData } = getContent();
   return { props: { postData } }
 }
