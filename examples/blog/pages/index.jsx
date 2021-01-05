@@ -7,7 +7,7 @@ export default function IndexPage({ postData }) {
       <h1>My Cool Blog</h1>
       <ul>
         {postData.map((data) => (
-          <li>
+          <li key={data.slug}>
             <Link href="/blog/[slug]" as={`/blog/${data.slug}`}>
               <a>{data.frontMatter.title}</a>
             </Link>

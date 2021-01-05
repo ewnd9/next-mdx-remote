@@ -3,8 +3,10 @@ import hydrate from 'next-mdx-remote/hydrate'
 import matter from 'gray-matter'
 import axios from 'axios'
 
+import * as widgets from '../../../widgets/src'
+
 export default function BlogPost({ mdxSource, frontMatter }) {
-  const content = hydrate(mdxSource)
+  const content = hydrate(mdxSource, { components: widgets })
   return (
     <>
       <h1>{frontMatter.title}</h1>
@@ -31,6 +33,6 @@ export async function getStaticProps({ params }) {
   const { content: source } = postData.find((_) => _.slug === params.slug)
 
   const { data, content } = matter(source)
-  const mdxSource = await renderToString(content)
+  const mdxSource = await renderToString(content, { components: widgets })
   return { props: { mdxSource, frontMatter: data } }
 }

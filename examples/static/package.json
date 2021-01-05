@@ -1,10 +1,10 @@
 {
-  "name": "blog",
+  "name": "blog-static",
   "version": "1.0.0",
-  "description": "example next-mdx-remote blog",
+  "description": "example next-mdx-remote blog-static",
   "main": "index.js",
   "scripts": {
-    "start:dev": "next-remote-watch ./content"
+    "start:dev": "node ./static-server"
   },
   "author": "Jeff Escalante",
   "license": "MIT",
