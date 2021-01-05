@@ -1,6 +1,5 @@
 import Link from 'next/link'
-
-import { getContent } from '../utils/get-content';
+import axios from 'axios'
 
 export default function IndexPage({ postData }) {
   return (
@@ -20,6 +19,8 @@ export default function IndexPage({ postData }) {
 }
 
 export async function getStaticProps() {
-  const { postData } = getContent();
+  const {
+    data: { posts: postData },
+  } = await axios('http://localhost:3001/api/v1/posts')
   return { props: { postData } }
 }
